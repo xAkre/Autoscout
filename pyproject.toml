@@ -17,6 +17,60 @@ python = "^3.13"
 ruff = "^0.11.5"
 mypy = "^1.15.0"
 
+# Ruff configuration
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+ignore = [
+    "D203",
+    "D212",
+    "D104",
+    "D100",
+    "ANN401",
+    "PT012",
+    "FBT001",
+    "FBT002",
+    "RUF012",
+    "A005",
+    "ARG001",
+    "ARG002",
+    "N812",
+]
+select = [
+    "F",
+    "E",
+    "W",
+    "I",
+    "N",
+    "D",
+    "UP",
+    "ANN",
+    "ASYNC",
+    "BLE",
+    "FBT",
+    "B",
+    "A",
+    "C4",
+    "FA",
+    "ICN",
+    "LOG",
+    "T20",
+    "PT",
+    "Q",
+    "RSE",
+    "RET",
+    "SLF",
+    "SLOT",
+    "SIM",
+    "ARG",
+    "RUF",
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
 # Build system
 
 [build-system]
