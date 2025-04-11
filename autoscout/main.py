@@ -1,13 +1,15 @@
+import logging
+
 import dotenv
 
-from autoscout import logging
-from autoscout.autoscout import Autoscout
+from autoscout import log
+from autoscout.application import Autoscout
 from autoscout.config import Config
 
 
 def main() -> None:
     """Entrypoint for the application."""
-    logging.configure()
+    log.configure()
     dotenv.load_dotenv()
 
     logger = logging.getLogger(__name__)
