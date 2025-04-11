@@ -31,8 +31,7 @@ class Autoscout:
         self.stopped = False
         self.logger = logging.getLogger(__name__)
         self.logger.info(
-            "Autoscout application initialized with config:\n"
-            f"{json.dumps(self.config.__dict__, indent=4, default=str)}"
+            f"Autoscout application initialized with config:\n{json.dumps(self.config.__dict__, indent=4, default=str)}"
         )
 
     def start(self) -> None:
