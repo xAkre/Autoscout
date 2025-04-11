@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "autoscout"
+version = "0.1.0"
+description = ""
+authors = ["Dawid Szymaniak <dawid.szymania.dev@gmail.com>"]
+readme = "README.md"
+package-mode = false
+
+[tool.poetry.dependencies]
+python = "^3.13"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
