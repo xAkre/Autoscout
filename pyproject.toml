@@ -40,6 +40,7 @@ ignore = [
     "ARG001",
     "ARG002",
     "N812",
+    "A002",
 ]
 select = [
     "F",
