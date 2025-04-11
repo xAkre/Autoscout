@@ -12,6 +12,7 @@ package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.13"
+poethepoet = "^0.33.1"
 
 [tool.poetry.group.development.dependencies]
 ruff = "^0.11.5"
