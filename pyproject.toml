@@ -100,6 +100,10 @@ cmd = "mypy autoscout"
 [tool.poe.tasks.lint]
 sequence = ["_ruff_check", "_mypy"]
 
+[tool.poe.tasks.run]
+env = { "PYTHONPATH" = "." }
+cmd = "python autoscout/main.py"
+
 # Build system
 
 [build-system]
