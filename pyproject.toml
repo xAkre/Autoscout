@@ -84,6 +84,20 @@ warn_return_any = true
 warn_unused_ignores = true
 show_error_codes = true
 
+# Poethepoet tasks
+
+[tool.poe.tasks.format]
+cmd = "ruff format autoscout"
+
+[tool.poe.tasks._ruff_check]
+cmd = "ruff check autoscout"
+
+[tool.poe.tasks._mypy]
+cmd = "mypy autoscout"
+
+[tool.poe.tasks.lint]
+sequence = ["_ruff_check", "_mypy"]
+
 # Build system
 
 [build-system]
