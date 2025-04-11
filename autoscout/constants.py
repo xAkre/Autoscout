@@ -28,5 +28,5 @@ class Selector(enum.Enum):
     WORD_CENTER_SELECT_LABEL = (By.CSS_SELECTOR, 'label[for="organization"]')
     CATEGORY_SELECT_LABEL = (By.CSS_SELECTOR, 'label[for="category-select"]')
     SUBMIT_BUTTON = (By.CSS_SELECTOR, 'button[type="submit"]')
-    PRACTICE_ARIA_LABEL = (By.CSS_SELECTOR, '[aria-label="PRACTICE"]')
+    PRACTICE_EXAM_TYPE = (By.CSS_SELECTOR, 'input[aria-label="PRACTICE"]')
     REJECT_COOKIES_BUTTON = (By.ID, "cookiescript_reject")
