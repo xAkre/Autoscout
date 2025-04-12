@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import contextlib
+import datetime
 import json
 import logging
+import threading
 import time
 import typing
 
+import pygame
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.by import By
@@ -106,7 +109,90 @@ class Autoscout:
         self._click(Selector.SUBMIT_BUTTON)
         self._wait(EC.url_matches(URL.CHECK_FREE_DATES_REDIRECT))
         self._click(Selector.PRACTICE_EXAM_TYPE)
-        self.logger.info("No free appointments found.")
+        earliest_date = self._get_earliest_date()
+
+        if earliest_date is None:
+            self.logger.info("No appointments available.")
+            return
+
+        self.logger.info(f"Earliest date: {earliest_date}")
+
+        if earliest_date > self.config.DATE_TO:
+            self.logger.info("Earliest date is after the date to.")
+            return
+
+        self._select_earliest_appointment()
+        self._fill_in_credentials()
+
+        if self.config.CONFIRM:
+            self._confirm()
+            counter = 0
+
+            while True:
+                if counter * 10 >= constants._30_MINUTES:  # noqa: SLF001
+                    self.logger.info("30 minutes have passed. The reservation is no longer valid.")
+                    break
+
+                threading.Thread(target=self._play_notification).start()
+                self.logger.info(
+                    f"Reserved matching appointment {counter * 10} seconds ago. "
+                    "Go to the website to pay for the appointment."
+                )
+                counter += 1
+                time.sleep(10)
+        else:
+            self.logger.info("Skipping confirmation...")
+
+    def _play_notification(self) -> None:
+        """Play a notification sound."""
+        pygame.mixer.music.load("assets/sound/notification.mp3")
+        pygame.mixer.music.play()
+
+    def _get_earliest_date(self) -> datetime.date | None:
+        """Get the earliest date available."""
+        try:
+            self._wait(EC.presence_of_element_located(self._always_tuple(Selector.EARLIEST_DATE_H5)))
+            day, month = (
+                self.driver.find_element(*self._always_tuple(Selector.EARLIEST_DATE_H5)).text.split(" ")[1].split(".")
+            )
+
+            return datetime.date(
+                year=datetime.date.today().year,
+                month=int(month),
+                day=int(day),
+            )
+        except TimeoutException:
+            return None
+
+    def _select_earliest_appointment(self) -> None:
+        """Select the earliest appointment."""
+        self.logger.info("Selecting the earliest appointment...")
+        self._click(Selector.EARLIEST_APPOINTMENT_BUTTON)
+        self._click(Selector.CONFIRM_EARLIEST_APPOINTMENT_BUTTON)
+        self.logger.info("Earliest appointment selected.")
+
+    def _fill_in_credentials(self) -> None:
+        """Fill in the credentials."""
+        self.logger.info("Filling in the credentials...")
+        self._input(self.config.CREDENTIALS_FIRST_NAME, Selector.CREDENTIALS_FIRST_NAME_INPUT)
+        self._input(self.config.CREDENTIALS_LAST_NAME, Selector.CREDENTIALS_LAST_NAME_INPUT)
+        self._input(self.config.CREDENTIALS_PESEL, Selector.CREDENTIALS_PESEL_INPUT)
+        self._input(self.config.CREDENTIALS_PKK_NUMBER, Selector.CREDENTIALS_PKK_INPUT)
+        self._click(Selector.CATEGORY_SELECT_LABEL)
+        self._click((By.ID, self.config.WORD_CATEGORY))
+        self._input(self.config.CREDENTIALS_EMAIL, Selector.CREDENTIALS_EMAIL_INPUT)
+        self._input(self.config.CREDENTIALS_PHONE_NUMBER, Selector.CREDENTIALS_PHONE_INPUT)
+        self._click(Selector.CREDENTIALS_ACCEPT_REGULATIONS_CHECKBOX)
+        self._click(Selector.CREDENTIALS_NEXT_BUTTON)
+        self._wait(EC.url_matches(URL.EXAM_DETAILS))
+        self._click(Selector.CREDENTIALS_NEXT_BUTTON)
+        self.logger.info("Credentials filled in.")
+
+    def _confirm(self) -> None:
+        """Confirm the reservation."""
+        self.logger.info("Confirming the reservation...")
+        self._click(Selector.CONFIRM_RESERVATION_BUTTON)
+        self.logger.info("Reservation confirmed.")
 
     def _reject_cookies(self) -> None:
         """Reject cookies if the button is present."""
