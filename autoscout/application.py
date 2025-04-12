@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import contextlib
 import datetime
 import json
 import logging
@@ -10,7 +9,7 @@ import typing
 
 import pygame
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, TimeoutException
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
@@ -98,7 +97,6 @@ class Autoscout:
         """Check for free appointments."""
         self.logger.info("Checking for free appointments...")
         self.driver.get(URL.CHECK_FREE_DATES)
-        self._reject_cookies()
         self._click(Selector.PPK_EXAM_SELECT)
         self._click(Selector.VOIVODESHIP_SELECT_LABEL)
         self._click((By.ID, self.config.WORD_VOIVODESHIP))
@@ -193,11 +191,6 @@ class Autoscout:
         self.logger.info("Confirming the reservation...")
         self._click(Selector.CONFIRM_RESERVATION_BUTTON)
         self.logger.info("Reservation confirmed.")
-
-    def _reject_cookies(self) -> None:
-        """Reject cookies if the button is present."""
-        with contextlib.suppress(NoSuchElementException, TimeoutException):
-            self._click(Selector.REJECT_COOKIES_BUTTON)
 
     def _always_tuple(self, selector: Selector | tuple[str, str]) -> tuple[str, str]:
         """Return a tuple from a `Selector` or a `tuple`."""
