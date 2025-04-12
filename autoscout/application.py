@@ -114,7 +114,7 @@ class Autoscout:
             self._click(Selector.REJECT_COOKIES_BUTTON)
 
     def _always_tuple(self, selector: Selector | tuple[str, str]) -> tuple[str, str]:
-        """Return a tuple from a Selector or a tuple."""
+        """Return a tuple from a `Selector` or a `tuple`."""
         return selector.value if isinstance(selector, Selector) else selector
 
     def _input(self, input: str, selector: Selector | tuple[str, str]) -> None:

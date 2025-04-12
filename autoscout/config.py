@@ -18,7 +18,6 @@ TYPE_CONVERTERS: dict[type, collections.abc.Callable[[str], typing.Any]] = {
 class Config:
     """Configuration for the application."""
 
-    # Credentials
     CREDENTIALS_EMAIL: str
     CREDENTIALS_PASSWORD: str
     CREDENTIALS_FIRST_NAME: str
@@ -26,13 +25,9 @@ class Config:
     CREDENTIALS_PESEL: str
     CREDENTIALS_PHONE_NUMBER: str
     CREDENTIALS_PKK_NUMBER: str
-
-    # Exam options
     WORD_VOIVODESHIP: str
     WORD_CENTER: str
     WORD_CATEGORY: str
-
-    # Application options
     DATE_TO: datetime.date
     CONFIRM: bool
 
