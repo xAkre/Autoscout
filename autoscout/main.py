@@ -1,6 +1,7 @@
 import logging
 
 import dotenv
+import pygame
 
 from autoscout import log
 from autoscout.application import Autoscout
@@ -11,6 +12,7 @@ def main() -> None:
     """Entrypoint for the application."""
     log.configure()
     dotenv.load_dotenv()
+    pygame.init()
 
     logger = logging.getLogger(__name__)
 
