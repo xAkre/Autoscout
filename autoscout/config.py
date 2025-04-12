@@ -8,9 +8,7 @@ import typing
 
 DATE_FORMAT = "%Y-%m-%d"
 TYPE_CONVERTERS: dict[type, collections.abc.Callable[[str], typing.Any]] = {
-    datetime.date: lambda value: datetime.datetime.strptime(value, DATE_FORMAT)
-    .replace(tzinfo=datetime.UTC)
-    .date(),
+    datetime.date: lambda value: datetime.datetime.strptime(value, DATE_FORMAT).date(),
     bool: lambda value: value == "True",
     int: lambda value: int(value),
 }
